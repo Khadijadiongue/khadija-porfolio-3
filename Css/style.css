@@ -858,3 +858,24 @@ footer h3 {
     text-align: center;
     padding: 50px;
 }
+@media (max-width: 768px) {
+    /* Force le conteneur principal à ne jamais dépasser l'écran */
+    body, html {
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    /* Empêche les images de dépasser */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Transforme ton menu (souvent en flex) pour qu'il s'empile */
+    /* Si ton menu a une classe comme .navbar, adapte le nom */
+    .navbar, nav {
+        flex-direction: column !important;
+        width: 100% !important;
+        text-align: center;
+    }
+}
