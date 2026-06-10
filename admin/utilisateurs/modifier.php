@@ -9,7 +9,7 @@ require_once __DIR__ . '/../verif_session.php';
 
 $id = (int)($_GET['id'] ?? 0);
 $stmt = $pdo->prepare("SELECT * FROM administrateurs WHERE id = :id");
-$stmt->execute([':id' => $id]); // CORRIGÉ : execute sans accent
+$stmt->execute([':id' => $id]); 
 $admin = $stmt->fetch();
 
 if (!$admin) { 
@@ -19,7 +19,6 @@ if (!$admin) {
 $erreur = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // CORRIGÉ : if au lieu de si, et vrais guillemets informatiques
     if (!verifier_csrf($_POST['csrf_token'] ?? '')) { 
         die("Action non autorisée."); 
     }
@@ -35,14 +34,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt = $pdo->prepare("UPDATE administrateurs SET prenom = :p, nom = :n, email = :e, mot_de_passe = :m WHERE id = :id");
         $stmt->execute([':p' => $prenom, ':n' => $nom, ':e' => $email, ':m' => $hash, ':id' => $id]);
-        
-        // Si l'admin modifie son propre profil, on met à jour son prénom en session immédiatement
         if ($id === (int)$_SESSION['admin_id']) {
             $_SESSION['admin_prenom'] = $prenom;
         }
 
-        header('Location: index.php'); // CORRIGÉ : header() au lieu de en-tête
-        exit(); // CORRIGÉ : exit() au lieu de Sortie()
+        header('Location: index.php'); 
+        exit(); 
     } else {
         $erreur = "Veuillez remplir tous les champs obligatoires.";
     }
