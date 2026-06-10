@@ -6,16 +6,12 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/../../config/connexion.php';
 require_once __DIR__ . '/../../fonctions.php';
 require_once __DIR__ . '/../verif_session.php';
-
-// Action de suppression en POST + Jeton CSRF
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'supprimer') {
     if (!verifier_csrf($_POST['csrf_token'] ?? '')) {
         die("Action non autorisée.");
     }
     
     $id = (int)$_POST['id'];
-    
-    // Supprime physiquement l'image associée du dossier images/projets/
     $stmtImg = $pdo->prepare("SELECT image FROM projets WHERE id = :id");
     $stmtImg->execute([':id' => $id]);
     $projet = $stmtImg->fetch();
