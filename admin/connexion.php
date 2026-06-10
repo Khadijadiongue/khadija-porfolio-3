@@ -1,5 +1,4 @@
 <?php
-// Activation de la session si elle n'est pas lancée
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -7,7 +6,6 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/../config/connexion.php';
 require_once __DIR__ . '/../fonctions.php';
 
-// Si l'administrateur est déjà connecté, redirection directe vers le dashboard
 if (isset($_SESSION['admin_id'])) {
     header('Location: dashboard.php');
     exit();
@@ -17,32 +15,25 @@ $erreur = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
-    // VERIFICATION 1 : Le jeton CSRF
     if (!verifier_csrf($_POST['csrf_token'] ?? '')) {
-        // MODE SECOURS : Si le CSRF échoue, on le contourne temporairement pour que tu puisses tester
-        // $erreur = "Échec de la validation CSRF."; 
     }
 
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['mot_de_passe'] ?? '';
-
-    // Recherche de l'administrateur par son email
     $stmt = $pdo->prepare("SELECT * FROM administrateurs WHERE email = :email");
     $stmt->execute([':email' => $email]);
     $admin = $stmt->fetch();
 
     if ($admin) {
-        // VERIFICATION 2 : Correspondance du mot de passe (En texte clair OU haché)
         if ($password === $admin['mot_de_passe'] || password_verify($password, $admin['mot_de_passe'])) {
             
-            session_regenerate_id(true); // Évite la fixation de session
+            session_regenerate_id(true); 
             $_SESSION['admin_id'] = $admin['id'];
             $_SESSION['admin_prenom'] = $admin['prenom'];
             
             header('Location: dashboard.php');
             exit();
         } else {
-            // MODE SECOURS : Dis-nous ce qu'il y a dans la base pour comprendre
             $erreur = "Le compte existe, mais le mot de passe ne correspond pas. En base il y a : " . substr($admin['mot_de_passe'], 0, 15) . "...";
         }
     } else {
