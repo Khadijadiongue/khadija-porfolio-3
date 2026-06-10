@@ -1,19 +1,14 @@
 <?php
-// Activation de la session si elle n'est pas lancée
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 require_once __DIR__ . '/../config/connexion.php';
 require_once __DIR__ . '/../fonctions.php';
-require_once __DIR__ . '/verif_session.php'; // Protège la page
-
-// Comptages pour les statistiques
+require_once __DIR__ . '/verif_session.php';
 $total_projets = $pdo->query("SELECT COUNT(*) FROM projets")->fetchColumn();
 $messages_non_lus = $pdo->query("SELECT COUNT(*) FROM messages_contact WHERE lu = 0")->fetchColumn();
 $demandes_non_lus = $pdo->query("SELECT COUNT(*) FROM demandes_projet WHERE lu = 0")->fetchColumn();
-
-// Listes d'activité récentes (Limité à 5 lignes)
 $dernieres_visites = $pdo->query("SELECT * FROM visites ORDER BY date_visite DESC LIMIT 5")->fetchAll();
 $dernieres_demandes = $pdo->query("SELECT * FROM demandes_projet ORDER BY date_demande DESC LIMIT 5")->fetchAll();
 ?>
