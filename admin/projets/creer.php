@@ -3,7 +3,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Inclusions de vos fichiers de configuration
 require_once __DIR__ . '/../../config/connexion.php';
 require_once __DIR__ . '/../../fonctions.php';
 require_once __DIR__ . '/../verif_session.php';
@@ -21,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($titre) || empty($description) || empty($technologies)) {
         $erreur = "Veuillez remplir tous les champs obligatoires.";
     } else {
-        // Traitement de l'image (si une image est fournie)
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $extensions_valides = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
             $extension_upload = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
@@ -39,8 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $erreur = "Format d'image invalide (Uniquement : jpg, jpeg, png, webp, gif).";
             }
         }
-
-        // Insertion sécurisée dans la base de données s'il n'y a pas d'erreur d'image
         if (empty($erreur)) {
             try {
                 $stmt = $pdo->prepare("INSERT INTO projets (titre, description, technologies, image, lien) VALUES (:t, :d, :tech, :i, :l)");
@@ -56,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: index.php');
                 exit();
             } catch (PDOException $e) {
-                // Si la table ou les colonnes ont un problème, l'erreur s'affichera clairement ici
                 $erreur = "Erreur de base de données : " . $e->getMessage();
             }
         }
