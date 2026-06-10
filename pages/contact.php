@@ -1,28 +1,19 @@
 <?php
-// 1. Inclusions obligatoires tout en haut (sans espaces dans les chemins)
 require_once '../config/connexion.php';
 require_once '../fonctions.php';
-
-// 2. Journalisation de la visite (Nom exact de votre fonction globale)
 journaliser_visite($pdo, basename($_SERVER['PHP_SELF']));
-
-// Initialisation des variables de messages
 $contact_sucess = "";
 $contact_erreur = "";
 $projet_sucess = "";
 $projet_erreur = "";
 
-// 3. TRAITEMENT DU FORMULAIRE : CONTACT
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["envoyer_message"])) {
-    // Vérification du jeton CSRF (Nom exact de votre fonction globale)
     if (!verifier_csrf($_POST['csrf_token'] ?? '')) {
         $contact_erreur = "Échec de la vérification de sécurité (CSRF).";
     } else {
         $nom = trim($_POST["nom"] ?? "");
         $email = trim($_POST["email"] ?? "");
         $message = trim($_POST["message"] ?? "");
-
-        // Validation (Logique Partie 2 adaptée)
         if (empty($nom)) {
             $contact_erreur = "Le nom est obligatoire.";
         } elseif (empty($email)) {
@@ -33,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["envoyer_message"])) {
             $contact_erreur = "Le message est obligatoire.";
         } else {
             try {
-                // Insertion sécurisée en BDD (Requête préparée)
+                
                 $sql = "INSERT INTO messages_contact (nom, email, message) VALUES (:nom, :email, :message)";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute([
@@ -42,7 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["envoyer_message"])) {
                     ':message' => $message
                 ]);
                 $contact_sucess = "Votre message a été envoyé avec succès !";
-                // On vide les champs après succès
                 $_POST['nom'] = $_POST['email'] = $_POST['message'] = "";
             } catch (Exception $e) {
                 error_log("Erreur insertion contact : " . $e->getMessage());
@@ -52,14 +42,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["envoyer_message"])) {
     }
 }
 
-// 4. TRAITEMENT DU FORMULAIRE : DEMANDE DE PROJET
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["envoyer_projet"])) {
-    // Vérification du jeton CSRF
     if (!verifier_csrf($_POST['csrf_token'] ?? '')) {
         $projet_erreur = "Échec de la vérification de sécurité (CSRF).";
     } else {
         $nom_du_projet = trim($_POST["nom_du_projet"] ?? "");
-        $email_demandeur = trim($_POST["email_projet"] ?? ""); // Récupération de l'email dynamique
+        $email_demandeur = trim($_POST["email_projet"] ?? ""); 
         $type_de_projet = trim($_POST["type_de_projet"] ?? "");
         $budget = trim($_POST["budget"] ?? "");
         $description = trim($_POST["description"] ?? "");
@@ -93,8 +81,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["envoyer_projet"])) {
         }
     }
 }
-
-// Génération du jeton pour l'affichage des formulaires
 $token = generer_csrf();
 ?>
 <!DOCTYPE html>
