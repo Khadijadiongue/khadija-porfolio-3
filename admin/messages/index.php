@@ -11,8 +11,8 @@ if (isset($_GET['lire'])) {
     $id_msg = (int)$_GET['lire'];
     $stmt = $pdo->prepare("UPDATE messages_contact SET lu = 1 WHERE id = :id");
     $stmt->execute([':id' => $id_msg]);
-    header('Location: index.php'); // Corrigé
-    exit(); // Corrigé
+    header('Location: index.php');
+    exit(); 
 }
 
 $messages = $pdo->query("SELECT * FROM messages_contact ORDER BY date_envoi DESC")->fetchAll();
