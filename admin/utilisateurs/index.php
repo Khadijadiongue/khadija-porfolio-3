@@ -13,8 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 
     $id_cible = (int)$_POST['id'];
-
-    // RÈGLE CRITIQUE : Interdire de supprimer son propre compte
     if ($id_cible === (int)$_SESSION['admin_id']) {
         die("Erreur de sécurité : Vous ne pouvez pas détruire votre propre session administrateur.");
     }
