@@ -1,5 +1,4 @@
 <?php
-// 1. Inclusions obligatoires
 require_once __DIR__ . '/../../config/connexion.php';
 require_once __DIR__ . '/../../fonctions.php';
 require_once __DIR__ . '/../verif_session.php';
