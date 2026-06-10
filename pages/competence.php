@@ -1,10 +1,7 @@
 <?php
-// 1. Inclusions obligatoires pour la base de données et les fonctions de sécurité
 require_once '../config/connexion.php';
 require_once '../fonctions.php';
 
-// 2. Journalisation automatique de la visite sur cette page (Fonction corrigée pour éviter l'erreur fatale)
-journaliser_visite($pdo, basename($_SERVER['PHP_SELF']));
 ?>
 <!DOCTYPE html>
 <html lang="fr">
