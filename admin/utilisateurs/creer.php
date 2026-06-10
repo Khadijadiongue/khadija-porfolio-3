@@ -20,17 +20,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['mot_de_passe'] ?? '';
 
     if (!empty($prenom) && !empty($nom) && !empty($email) && !empty($password)) {
-        // Validation de l'unicité de l'email
         $check = $pdo->prepare("SELECT id FROM administrateurs WHERE email = :email");
         $check->execute([':email' => $email]);
         if ($check->fetch()) {
             $erreur = "Cette adresse e-mail existe déjà.";
-        } else { // CORRIGÉ : else au lieu de sinon
+        } else { 
             $hash = password_hash($password, PASSWORD_BCRYPT);
             $stmt = $pdo->prepare("INSERT INTO administrateurs (prenom, nom, email, mot_de_passe) VALUES (:p, :n, :e, :m)");
             $stmt->execute([':p' => $prenom, ':n' => $nom, ':e' => $email, ':m' => $hash]);
-            header('Location: index.php'); // CORRIGÉ : header() au lieu de en-tête
-            exit(); // CORRIGÉ : exit() au lieu de Sortie()
+            header('Location: index.php'); 
+            exit(); 
         }
     } else {
         $erreur = "Veuillez remplir tous les champs obligatoires.";
