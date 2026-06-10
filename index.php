@@ -1,9 +1,6 @@
 <?php
-// 1. Inclusions obligatoires (Chemins corrigés depuis la racine du projet)
 require_once 'config/connexion.php';
 require_once 'fonctions.php';
-
-// 2. Journalisation automatique de la visite (Nom exact de votre fonction globale)
 journaliser_visite($pdo, basename($_SERVER['PHP_SELF']));
 ?>
 <!DOCTYPE html>
