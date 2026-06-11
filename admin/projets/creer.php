@@ -11,12 +11,11 @@ $erreur = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $titre = trim($_POST['titre'] ?? '');
-    $description = trim($_POST['description'] ?? '');
-    $technologies = trim($_POST['technologies'] ?? '');
-    $lien = trim($_POST['lien'] ?? '') ?: null;
+     $titre = htmlspecialchars(trim($_POST['titre'] ?? ''));
+    $description = htmlspecialchars(trim($_POST['description'] ?? ''));
+    $technologies = htmlspecialchars(trim($_POST['technologies'] ?? ''));
+    $lien = htmlspecialchars(trim($_POST['lien'] ?? '')) ?: null;
     $nom_image = null;
-
     if (empty($titre) || empty($description) || empty($technologies)) {
         $erreur = "Veuillez remplir tous les champs obligatoires.";
     } else {
