@@ -3,6 +3,10 @@ require_once __DIR__ . '/../config/connexion.php';
 $email_test = "el.hadji.ahmadou.cherif.diouf@gmail.com"; 
 $password_clair = "Passer1234"; 
 $password_hache = password_hash($password_clair, PASSWORD_BCRYPT);
+password_verify(
+$password_clair,
+$password_hache
+);
 
 try {
     $stmt = $pdo->prepare("SELECT id FROM administrateurs WHERE email = :email");
