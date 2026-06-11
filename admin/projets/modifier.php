@@ -14,11 +14,10 @@ $erreur = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!verifier_csrf($_POST['csrf_token'] ?? '')) { die("Action invalide."); }
-
-    $titre = trim($_POST['titre'] ?? '');
-    $description = trim($_POST['description'] ?? '');
-    $technologies = trim($_POST['technologies'] ?? '');
-    $lien = trim($_POST['lien'] ?? '') ?: null;
+$titre = htmlspecialchars(trim($_POST['titre'] ?? ''));
+    $description = htmlspecialchars(trim($_POST['description'] ?? ''));
+    $technologies = htmlspecialchars(trim($_POST['technologies'] ?? ''));
+    $lien = htmlspecialchars(trim($_POST['lien'] ?? '')) ?: null;
     $nom_image = $projet['image']; 
 
     if (!empty($titre) && !empty($description) && !empty($technologies)) {
