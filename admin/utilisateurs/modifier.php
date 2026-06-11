@@ -23,9 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die("Action non autorisée."); 
     }
 
-    $prenom = trim($_POST['prenom'] ?? '');
-    $nom = trim($_POST['nom'] ?? '');
-    $email = trim($_POST['email'] ?? '');
+    $prenom = htmlspecialchars(trim($_POST['prenom'] ?? ''));
+    $nom = htmlspecialchars(trim($_POST['nom'] ?? ''));
+    $email = htmlspecialchars(trim($_POST['email'] ?? '')) ?: null;
     $password = $_POST['mot_de_passe'] ?? '';
 
     if (!empty($prenom) && !empty($nom) && !empty($email)) {
