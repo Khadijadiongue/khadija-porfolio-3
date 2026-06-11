@@ -1,29 +1,22 @@
 <?php
-// On inclut le fichier de connexion
 require_once __DIR__ . '/../config/connexion.php';
 
-// Identifiants d'urgence
 $email_test = "el.hadji.ahmadou.cherif.diouf@gmail.com"; 
 $password_clair = "Passer1234"; 
-
-// Hachage du mot de passe
 $password_hache = password_hash($password_clair, PASSWORD_BCRYPT);
 
 $message = "";
 
 try {
-    // 1. On regarde si le compte existe déjà
     $stmt = $pdo->prepare("SELECT id FROM administrateurs WHERE email = :email");
     $stmt->execute([':email' => $email_test]);
     $admin = $stmt->fetch();
 
     if ($admin) {
-        // Mise à jour du mot de passe
         $update = $pdo->prepare("UPDATE administrateurs SET mot_de_passe = :mdp WHERE email = :email");
         $update->execute([':mdp' => $password_hache, ':email' => $email_test]);
         $message = "<h3>[Succès] Mot de passe réinitialisé !</h3>";
     } else {
-        // Création du compte
         $insert = $pdo->prepare("INSERT INTO administrateurs (prenom, email, mot_de_passe) VALUES ('Khadidiatou', :email, :mdp)");
         $insert->execute([':email' => $email_test, ':mdp' => $password_hache]);
         $message = "<h3>[Succès] Nouveau compte créé !</h3>";
